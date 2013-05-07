@@ -1,0 +1,3 @@
+[submodule "js/libs"]
+	path = js/libs
+	url = https://github.com/Mineduc-Exploratorium/libs.git
