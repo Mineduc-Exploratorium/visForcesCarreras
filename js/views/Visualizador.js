@@ -68,7 +68,10 @@ define([
 		* @returns {string} Mensaje (html) a ser utilizado por tooltip
 		*/
 		tootipMessage : function(d) {
+			formatMiles = d3.format(",d");
 			var msg = "<span class='text-info'>"+d.name+"</span>";
+			msg += "<br>"+formatMiles(d.value) + " estudiantes"
+			msg += d.SEDE ? "<br>Sede: " + d.SEDE : "";
 
 			return msg;
 
@@ -112,7 +115,7 @@ define([
 
 			this.radious = d3.scale.sqrt()
 				.range([3,50])
-				.domain([0, root.total])
+				.domain([0, root.value])
 
 
 			// tree.nodes(root);
@@ -155,15 +158,15 @@ define([
 			   	 if (!node.id) node.id = ++i;			     
 
 			     if (node.values) {
-			     	node.total =0;
+			     	node.value =0;
 
 			     	// Recorre todos los hijos y calcula el total en funcion de la suma del total de los hijos
 			     	node.values.forEach(function(d) {
-			     		node.total += recurse(d, node.id);
+			     		node.value += recurse(d, node.id);
 			     	});
 
 			     } else {
-			     	node.total = parseInt(node.TOTAL_MATRICULADOS);
+			     	node.value = parseInt(node.TOTAL_MATRICULADOS);
 			     }
 			     if (!node.name) node.name = node.key;
 			     if (!node.key) node.name = node.CARRERA;
@@ -175,7 +178,7 @@ define([
 			     }
 			     nodes.push(node);
 
-			     return node.total;
+			     return node.value;
 			   }
 
 			   recurse(root, -1);
@@ -242,13 +245,11 @@ define([
 			      .attr("class", "node")
 			      .attr("cx", function(d) { return d.x; })
 			      .attr("cy", function(d) { return d.y; })
-			      .attr("r", function(d) { return d.children ? 5 : self.radious(d.total) })
-			      .style("fill", function(d) { return color(d.group); })
 			      .on("click", click)
 			      .call(force.drag);
 
 			    node
-			      .attr("r", function(d) { return d.children ? 10 : self.radious(d.total) })
+			      .attr("r", function(d) { return d.children ? 10 : self.radious(d.value) })
 			       .style("fill", function(d) { return d.children ? "blue" :  color(d.group)})
 
 				node.on("mouseover", function(d) {
