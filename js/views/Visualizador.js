@@ -148,17 +148,23 @@ define([
 			function podaInicial(root) {
 			   var nodes = [], i = 0;
 
-			   function recurse(node) {
+			   function recurse(node, idPadre) {
+			   	 // Asigna un nombre de grupo equivalente al id del nodo Padre
+			   	 if (!node.group) node.group = idPadre;
+			   	 // Genera un id unico y secuencial a cada noso
+			   	 if (!node.id) node.id = ++i;			     
+
 			     if (node.values) {
 			     	node.total =0;
+
+			     	// Recorre todos los hijos y calcula el total en funcion de la suma del total de los hijos
 			     	node.values.forEach(function(d) {
-			     		node.total += recurse(d);
+			     		node.total += recurse(d, node.id);
 			     	});
 
 			     } else {
 			     	node.total = parseInt(node.TOTAL_MATRICULADOS);
 			     }
-			     if (!node.id) node.id = ++i;
 			     if (!node.name) node.name = node.key;
 			     if (!node.key) node.name = node.CARRERA;
 			     if (node.values) {
@@ -172,7 +178,7 @@ define([
 			     return node.total;
 			   }
 
-			   recurse(root);
+			   recurse(root, -1);
 			   //return nodes;
 			 }
 
@@ -237,13 +243,13 @@ define([
 			      .attr("cx", function(d) { return d.x; })
 			      .attr("cy", function(d) { return d.y; })
 			      .attr("r", function(d) { return d.children ? 5 : self.radious(d.total) })
-			      .style("fill", function(d) { return color(d.depth); })
+			      .style("fill", function(d) { return color(d.group); })
 			      .on("click", click)
 			      .call(force.drag);
 
 			    node
 			      .attr("r", function(d) { return d.children ? 10 : self.radious(d.total) })
-			       .style("fill", function(d) { return d.children ? "blue" :  color(d.depth)})
+			       .style("fill", function(d) { return d.children ? "blue" :  color(d.group)})
 
 				node.on("mouseover", function(d) {
 							self.tooltip.show(d)}
