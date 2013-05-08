@@ -70,8 +70,8 @@ define([
 		tootipMessage : function(d) {
 			formatMiles = d3.format(",d");
 			var msg = "<span class='text-info'>"+d.name+"</span>";
+			msg += d.SEDE ? "<br>" + d.SEDE : "";
 			msg += "<br>"+formatMiles(d.value) + " estudiantes"
-			msg += d.SEDE ? "<br>Sede: " + d.SEDE : "";
 
 			return msg;
 
