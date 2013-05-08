@@ -104,10 +104,10 @@ define([
 
 			var tree = d3.layout.tree()
 				//.sort(null)
-				.children(function(d) {return d.values });
+				//.children(function(d) {return d.values });
 
 
-			
+			//tree.nodes(root);
 			podaInicial(root);
 
 			this.radious = d3.scale.sqrt()
@@ -163,9 +163,9 @@ define([
 			     if (!node.key) node.name = node.CARRERA;
 			     if (node.values) {
 			     	// node.children = node.values;
-			     	node._values = node.values;
+			     	node._children = node.values;
 			     	node.values = null;
-			     	node.children= nodes._values;
+			     	node.children= null;
 			     }
 			     nodes.push(node);
 
@@ -180,13 +180,13 @@ define([
 			   var nodes = [], i = 0;
 
 			   function recurse(node) {
-			     if (node.values)  {
-			     	node.values.forEach(recurse);
+			     if (node.children)  {
+			     	node.children.forEach(recurse);
 			     }
 			     if (!node.id) node.id = ++i;
-			     if (!node.radio && node._values) {
+			     if (!node.radio && node._children) {
 
-			     	node.radio = node._values.length;
+			     	node.radio = node._children.length;
 			     	if(node.radio == 1) node.radio = 15;
 			     }
 			    			     
@@ -199,7 +199,7 @@ define([
 
 			 function update() {
 			  
-			  tree.nodes(root);
+			  //tree.nodes(root);
 			  var nodes = flatten(root);
 			  
 			  var links = tree.links(nodes);
@@ -236,14 +236,14 @@ define([
 			      .attr("class", "node")
 			      .attr("cx", function(d) { return d.x; })
 			      .attr("cy", function(d) { return d.y; })
-			      .attr("r", function(d) { return d.values ? 5 : self.radious(d.total) })
+			      .attr("r", function(d) { return d.children ? 5 : self.radious(d.total) })
 			      .style("fill", function(d) { return color(d.depth); })
 			      .on("click", click)
 			      .call(force.drag);
 
 			    node
-			      .attr("r", function(d) { return d.values ? 10 : self.radious(d.total) })
-			       .style("fill", function(d) { return d.values ? "blue" :  color(d.depth)})
+			      .attr("r", function(d) { return d.children ? 10 : self.radious(d.total) })
+			       .style("fill", function(d) { return d.children ? "blue" :  color(d.depth)})
 
 				node.on("mouseover", function(d) {
 							self.tooltip.show(d)}
