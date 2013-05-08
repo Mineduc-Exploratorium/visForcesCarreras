@@ -155,7 +155,10 @@ define([
 			   	 // Asigna un nombre de grupo equivalente al id del nodo Padre
 			   	 if (!node.group) node.group = idPadre;
 			   	 // Genera un id unico y secuencial a cada noso
-			   	 if (!node.id) node.id = ++i;			     
+			   	 if (!node.id) node.id = ++i;	
+
+			   	 node.x = self.width/2;
+			   	 node.y = self.height/2;		     
 
 			     if (node.values) {
 			     	node.value =0;
@@ -275,13 +278,6 @@ define([
 
 			// Toggle children on click.
 			function click(d) {
-			  if (d.values) {
-			    d._values = d.values;
-			    d.values = null;
-			  } else {
-			    d.values = d._values;
-			    d._values = null;
-			  }
 
 			  if (d.children) {
 			    d._children = d.children;
@@ -290,8 +286,7 @@ define([
 			    d.children = d._children;
 			    d._children = null;
 			  }
-			  d.x = 470;
-			  d.y = 370;
+
 			  update();
 			}
 
