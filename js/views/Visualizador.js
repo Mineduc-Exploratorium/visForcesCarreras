@@ -55,6 +55,7 @@ define([
 			    .attr("transform", 
 			          "translate(" + this.margin.left + "," + this.margin.top + ")");
 
+			this.firstround = true;
 
 			this.render();
 	 
@@ -175,9 +176,18 @@ define([
 			     if (!node.key) node.name = node.CARRERA;
 			     if (node.values) {
 			     	// node.children = node.values;
-			     	node._children = node.values;
-			     	node.values = null;
-			     	node.children= null;
+
+
+			     	if (node.group < 2) {
+			     		node.children = node.values;
+			     		node.values = null;
+			     		node._children= null;
+			     	} else {
+			     		node._children = node.values;
+			     		node.values = null;
+			     		node.children= null;
+			     	}
+
 			     }
 			     nodes.push(node);
 
@@ -222,6 +232,13 @@ define([
 			      .nodes(nodes)
 			      .links(links)
 			      .start();
+
+			  if (self.firstround == true) {
+			  	for (var i = 0; i < 100; ++i) force.tick();
+			  	self.firstround = false;
+			  }
+				
+
 
 			  // Update the links…
 			  link = self.svg.selectAll("line.link")
